@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Web3 from "web3";
 import Navbar from "./containers/Navbar";
 import Loading from "./containers/Loading";
 
 import FormsApp from "./abis/FormsApp.json";
 import "./App.css";
+import Dashboard from "./components/Dashboard";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import CreateForm from "./components/create-form/CreateForm";
+
+const FormsContext = React.createContext();
+
+export const useForms = () => useContext(FormsContext);
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [loadingMsg, setLoadingMsg] = useState("");
   const [account, setAccount] = useState("");
 
-  const [formsApp, setFormsApp] = useState(null);
+  const [formsAppContract, setFormsAppContract] = useState(null);
 
   useEffect(() => {
     if (!loading) {
@@ -54,11 +61,11 @@ function App() {
     //Check if net data exists, then
     if (networkData) {
       //Assign contract to a variable
-      const _formsApp = new web3.eth.Contract(
+      const _formsAppContract = new web3.eth.Contract(
         FormsApp.abi,
         networkData.address
       );
-      setFormsApp(_formsApp);
+      setFormsAppContract(_formsAppContract);
     } else {
       //If network data doesn't exists, log error
       alert(" Contract is not deployed to detected network!!!");
@@ -72,13 +79,15 @@ function App() {
   return (
     <>
       <Navbar account={account} />
-      <div className="container-fluid mt-5">
-        <div className="row">
-          <div className="text-center">
-            <h3>Hello World!!</h3>
-            <p>{account}</p>
-          </div>
-        </div>
+      <div className="container mt-5">
+        <FormsContext.Provider value={{ formsAppContract }}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="create-form" element={<CreateForm />} />
+            </Routes>
+          </BrowserRouter>
+        </FormsContext.Provider>
       </div>
     </>
   );

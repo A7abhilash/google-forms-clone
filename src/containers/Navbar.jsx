@@ -14,7 +14,9 @@ function Navbar({ account }) {
             height={30}
             style={{ marginRight: 5 }}
           />
-          <h3>DApp Forms</h3>
+          <a href="/" className="text-dark text-decoration-none">
+            <h3>DApp Forms</h3>
+          </a>
         </div>
         <div>
           <span className="text-secondary">{account}</span>
