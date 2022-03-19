@@ -8,6 +8,7 @@ import "./App.css";
 import Dashboard from "./components/Dashboard";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreateForm from "./components/create-form/CreateForm";
+import EditForm from "./components/edit-form/EditForm";
 
 const FormsContext = React.createContext();
 
@@ -67,9 +68,6 @@ function App() {
       );
       // console.log(_formsAppContract);
       setFormsAppContract(_formsAppContract);
-
-      let res = await _formsAppContract.methods.formsCount().call();
-      console.log(res);
     } else {
       //If network data doesn't exists, log error
       alert(" Contract is not deployed to detected network!!!");
@@ -105,8 +103,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="create-form" element={<CreateForm />} />
-              {/* /forms/edit/1 */}
-              {/* /forms/view/1 */}
+              <Route path="edit-form/:id" element={<EditForm />} />
+              {/* view-form/:id */}
             </Routes>
           </BrowserRouter>
         </FormsContext.Provider>

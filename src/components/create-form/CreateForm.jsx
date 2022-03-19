@@ -14,17 +14,17 @@ function CreateForm() {
 
   const createForm = async () => {
     try {
-      console.log(title);
-      console.log(description);
-      console.log(endTime);
-      console.log(allowResponse);
-      console.log(fields);
+      // console.log(title);
+      // console.log(description);
+      // console.log(endTime);
+      // console.log(allowResponse);
+      // console.log(fields);
 
       formsAppContract.methods
         .createForm(
           title,
           description,
-          new Date(endTime).getTime().toString(),
+          endTime ? new Date(endTime).getTime().toString() : "",
           allowResponse,
           fields.length,
           fields
@@ -32,8 +32,7 @@ function CreateForm() {
         .send({ from: address })
         .on("receipt", () => {
           alert("Successfully created new form...");
-          window.location.replace("/forms/edit/1");
-          // window.location.replace("/")
+          window.location.replace("/");
         });
     } catch (error) {
       console.log(error);
