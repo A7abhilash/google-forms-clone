@@ -65,11 +65,29 @@ function App() {
         FormsApp.abi,
         networkData.address
       );
+      // console.log(_formsAppContract);
       setFormsAppContract(_formsAppContract);
+
+      let res = await _formsAppContract.methods.formsCount().call();
+      console.log(res);
     } else {
       //If network data doesn't exists, log error
       alert(" Contract is not deployed to detected network!!!");
     }
+  }
+
+  function getErrorMessage(error) {
+    let message = error.message;
+    if (!message.includes("revert")) {
+      return message;
+    }
+    let revertIndex = message.indexOf(`"message\\": \\"`);
+    // console.log(revertIndex);
+    let slicedMessage = message.slice(revertIndex);
+    // console.log(slicedMessage);
+    let nearestEnd = slicedMessage.indexOf('\\"');
+    let requiredMessage = slicedMessage.slice(0, nearestEnd);
+    return requiredMessage.replace(`"message\\": \\"`, "");
   }
 
   if (loading) {
@@ -80,11 +98,15 @@ function App() {
     <>
       <Navbar account={account} />
       <div className="container mt-5">
-        <FormsContext.Provider value={{ formsAppContract }}>
+        <FormsContext.Provider
+          value={{ formsAppContract, address: account, getErrorMessage }}
+        >
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="create-form" element={<CreateForm />} />
+              {/* /forms/edit/1 */}
+              {/* /forms/view/1 */}
             </Routes>
           </BrowserRouter>
         </FormsContext.Provider>

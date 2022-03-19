@@ -4,9 +4,9 @@ import Field from "./Field";
 function FieldsContainer({ fields = [], setFields }) {
   const handleAddNewField = () => {
     let field = {
-      id: fields.length + 1,
+      id: new Date().getTime().toString(),
       title: "Title",
-      type: "Text",
+      fieldType: "text",
       options: [],
     };
 

@@ -1,6 +1,15 @@
 import React from "react";
 
-function FormHeader() {
+function FormHeader({
+  title,
+  setTitle,
+  description,
+  setDescription,
+  endTime,
+  setEndTime,
+  allowResponse,
+  setAllowResponse,
+}) {
   return (
     <div className="col-12 mb-3">
       <div className="form-group">
@@ -10,6 +19,8 @@ function FormHeader() {
           className="form-control my-2"
           placeholder="Form Title"
           required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </div>
       <div className="form-group">
@@ -18,6 +29,8 @@ function FormHeader() {
           className="form-control my-2"
           placeholder="Form Description"
           rows="5"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         ></textarea>
       </div>
       <div className="form-group">
@@ -27,6 +40,8 @@ function FormHeader() {
           className="form-control my-2"
           placeholder="Form End Time"
           required
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
         />
       </div>
       <div className="form-group d-flex align-items-center">
@@ -34,8 +49,9 @@ function FormHeader() {
         <input
           type="checkbox"
           className="my-2"
-          value={true}
-          checked={true}
+          value={allowResponse}
+          checked={allowResponse}
+          onChange={(e) => setAllowResponse(e.target.checked)}
           style={{ marginLeft: 10, marginBottom: -5 }}
         />
       </div>

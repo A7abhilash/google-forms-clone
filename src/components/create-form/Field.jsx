@@ -4,14 +4,14 @@ import AddOptions from "./AddOptions";
 
 function Field({ _field, handleSaveField, handleRemoveField }) {
   const [fieldTitle, setFieldTitle] = useState("");
-  const [fieldType, setFieldType] = useState();
+  const [fieldType, setFieldType] = useState("");
   const [visible, setVisible] = useState(false);
   const [options, setOptions] = useState([]);
 
   const radios = [
-    { name: "Text", value: "Text" },
-    { name: "Checkbox", value: "Checkbox" },
-    { name: "Radio", value: "Radio" },
+    { name: "Text", value: "text" },
+    { name: "Checkbox", value: "checkbox" },
+    { name: "Radio", value: "radio" },
   ];
 
   const openModal = () => setVisible(true);
@@ -25,7 +25,7 @@ function Field({ _field, handleSaveField, handleRemoveField }) {
 
   const setInitialValues = () => {
     setFieldTitle(_field.title);
-    setFieldType(_field.type);
+    setFieldType(_field.fieldType);
     setOptions(_field.options);
   };
 
@@ -33,8 +33,8 @@ function Field({ _field, handleSaveField, handleRemoveField }) {
     let field = {
       id: _field.id,
       title: fieldTitle,
-      type: fieldType,
-      options: fieldType === "Text" ? [] : options,
+      fieldType,
+      options: fieldType === "text" ? [] : options,
     };
     handleSaveField(field);
     closeModal();
@@ -48,22 +48,19 @@ function Field({ _field, handleSaveField, handleRemoveField }) {
   return (
     <Card className="my-2">
       <Card.Header>
-        <div>
-          <div className="cursor-pointer">
-            <h6 className="text-truncate">{fieldTitle}</h6>
-          </div>
-          <div className="d-flex align-items-center">
-            <button className="btn btn-sm btn-info" onClick={openModal}>
-              Edit
-            </button>
-            <button
-              className="btn btn-sm btn-outline-danger"
-              onClick={() => handleRemoveField(_field.id)}
-              style={{ marginLeft: 15 }}
-            >
-              Remove
-            </button>
-          </div>
+        <h6 className="text-truncate">{fieldTitle}</h6>
+
+        <div className="d-flex align-items-center">
+          <button className="btn btn-sm btn-warning" onClick={openModal}>
+            Edit
+          </button>
+          <button
+            className="btn btn-sm btn-outline-danger"
+            onClick={() => handleRemoveField(_field.id)}
+            style={{ marginLeft: 15 }}
+          >
+            Remove
+          </button>
         </div>
       </Card.Header>
 
@@ -102,7 +99,7 @@ function Field({ _field, handleSaveField, handleRemoveField }) {
                   ))}
                 </ButtonGroup>
               </div>
-              {fieldType !== "Text" && (
+              {fieldType !== "text" && (
                 <div className="my-1">
                   <AddOptions options={options} setOptions={setOptions} />
                 </div>

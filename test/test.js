@@ -32,18 +32,46 @@ contract("FormsApp", (accounts) => {
         "Form-1",
         "Description of form 1",
         "16034930300",
-        "google-id-1",
         true,
-        4,
+        3,
         [
-          { id: 1, title: "Field-1" },
-          { id: 2, title: "Field-2" },
-          { id: 3, title: "Field-3" },
-          { id: 4, title: "Field-4" },
-        ]
+          {
+            id: 1,
+            title: "Field-1",
+            options: ["Option-11", "Option-12"],
+            fieldType: "checkbox",
+          },
+          {
+            id: 2,
+            title: "Field-2",
+            options: ["Option-21", "Option-22"],
+            fieldType: "radio",
+          },
+          { id: 3, title: "Field-3", options: [""], fieldType: "text" },
+        ],
+        { from: accounts[0] }
       );
 
-      //   console.log(result.logs[0].args);
+      // console.log(result.logs[0].args);
+      let count = await formsApp.formsCount();
+      // console.log(count.toNumber());
+
+      let form = await formsApp.forms(count.toNumber());
+      console.log(form);
+
+      // let fields = [];
+      // for (let i = 1; i <= form.fieldsCount.toNumber(); i++) {
+      //   let field = await formsApp.fields(count.toNumber(), i);
+      //   let options = [];
+      //   for (let j = 0; j < 3; j++) {
+      //     let option = field.options[j];
+      //     options.push(option);
+      //   }
+      //   console.log(options);
+      //   fields.push(field);
+      // }
+
+      // console.log(fields);
     });
   });
 });
