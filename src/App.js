@@ -9,6 +9,7 @@ import Dashboard from "./components/Dashboard";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreateForm from "./components/create-form/CreateForm";
 import EditForm from "./components/edit-form/EditForm";
+import ViewForm from "./components/view-form/ViewForm";
 
 const FormsContext = React.createContext();
 
@@ -104,7 +105,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="create-form" element={<CreateForm />} />
               <Route path="edit-form/:id" element={<EditForm />} />
-              {/* view-form/:id */}
+              <Route path="view-form/:id" element={<ViewForm />} />
             </Routes>
           </BrowserRouter>
         </FormsContext.Provider>

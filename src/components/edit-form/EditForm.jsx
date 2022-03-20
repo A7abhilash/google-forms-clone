@@ -22,9 +22,8 @@ function EditForm() {
       }
 
       if (address !== _form.owner) {
-        // window.location.replace(`/view-form/${id}`);
-        alert("Arrey bhai kya kar raha hain");
-        window.location.replace(`/`);
+        // alert("Arrey bhai kya kar raha hain");
+        window.location.replace(`/view-form/${id}`);
       }
 
       const _fields = await formsAppContract.methods.getFields(id).call();
