@@ -106,5 +106,16 @@ contract FormsApp{
 		return _forms;
 	}
 
-	// getFields(uint _formId)
+	function getFields(uint _formId) public view returns(Field[] memory){
+		Form memory form = forms[_formId];
+
+		uint _fieldsCount = form.fieldsCount;
+		Field[] memory _fields = new Field[](_fieldsCount);
+		
+		for(uint i=1; i<=_fieldsCount; i++){
+				_fields[i-1]=fields[form.id][i];
+		}
+
+		return _fields;
+	}
 }
