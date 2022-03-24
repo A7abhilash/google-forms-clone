@@ -15,6 +15,8 @@ function ViewForm() {
   // const [answers, setAnswers] = useState([])
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const [isSubmittingAllowed, setIsSubmittingAllowed] = useState(true);
+
   const getForm = async () => {
     setLoading(true);
     try {
@@ -31,6 +33,13 @@ function ViewForm() {
       setFields(_fields);
       setForm(_form);
 
+      let now = new Date().getTime();
+      let endTime = new Date(Number(_form.endTime)).getTime();
+
+      if (now > endTime || !_form.allowResponse) {
+        setIsSubmittingAllowed(false);
+      }
+
       //   TODO: Check if current user has submitted the form. If yes, then retrieve the submission!
     } catch (error) {
       console.log(error);
@@ -45,13 +54,27 @@ function ViewForm() {
     }
   }, [id]);
 
+  const handleSubmit = () => {
+    try {
+      let now = new Date().getTime();
+      let endTime = new Date(Number(form.endTime)).getTime();
+
+      if (!isSubmittingAllowed || isSubmitted || now > endTime) {
+        alert("This form is not taking the responses anymore...");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (loading) {
     return <Loading loadingMsg="Loading form..." />;
   }
   return (
     <div className="row mt-5 bg-light p-2 rounded">
       <div className="col-md-8 mx-1 mx-md-auto my-3">
-        <h5>{form.title}</h5>
+        <h4>{form.title}</h4>
         <p>{form.description}</p>
         {form.endTime && (
           <small>
@@ -60,42 +83,55 @@ function ViewForm() {
             </em>
           </small>
         )}
-        <hr />
       </div>
-      <div className="col-md-8 mx-1 mx-md-auto my-3">
-        <ListGroup>
-          {fields.map((field) => (
-            <ListGroup.Item key={field.id} variant="light">
-              <h6>{field.title}</h6>
-              {field.fieldType === "text" ? (
-                <textarea
-                  className="form-control"
-                  placeholder="Your Answer..."
-                ></textarea>
-              ) : (
-                field.options.map((option, index) => (
-                  <div key={`Option+${field.id}-${index}`}>
-                    <input
-                      type={field.fieldType}
-                      name={field.title}
-                      value={option}
-                      // onChange={ }
-                    />
-                    <label style={{ marginLeft: 10, marginBottom: 5 }}>
-                      {option}
-                    </label>
-                    <br />
-                  </div>
-                ))
-              )}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </div>
-      {!isSubmitted && (
+      <hr />
+      {isSubmittingAllowed ? (
         <div className="col-md-8 mx-1 mx-md-auto my-3">
-          <hr />
-          <button className="btn btn-primary">Submit</button>
+          <ListGroup>
+            {fields.map((field) => (
+              <ListGroup.Item key={field.id} variant="light">
+                <h6>{field.title}</h6>
+                {field.fieldType === "text" ? (
+                  <textarea
+                    className="form-control"
+                    placeholder="Your Answer..."
+                  ></textarea>
+                ) : (
+                  field.options.map((option, index) => (
+                    <div key={`Option+${field.id}-${index}`}>
+                      <input
+                        type={field.fieldType}
+                        name={field.title}
+                        value={option}
+                        // onChange={ }
+                      />
+                      <label
+                        htmlFor={field.title}
+                        style={{ marginLeft: 10, marginBottom: 5 }}
+                      >
+                        {option}
+                      </label>
+                      <br />
+                    </div>
+                  ))
+                )}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+          {!isSubmitted && (
+            <div>
+              <hr />
+              <button className="btn btn-primary" onClick={handleSubmit}>
+                Submit
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="col-md-8 mx-1 mx-md-auto my-3">
+          <p>
+            <strong>This form is not taking the responses anymore...</strong>
+          </p>
         </div>
       )}
     </div>
