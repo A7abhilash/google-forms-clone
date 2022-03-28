@@ -22,8 +22,7 @@ contract FormsApp{
 		uint submissionsCount;
 	}
 
-	// Store fields
-	
+	// Store fields...
 	mapping(uint => mapping(uint => Field)) public fields; // formId=>Field
 
 	struct Field{
@@ -32,9 +31,19 @@ contract FormsApp{
 		string[] options;
 		string fieldType;
 	}
+
+	// Store submissions...
+	mapping(uint => mapping(uint => Submissions)) public submissions; // formId=>Submission
+
+	struct Submissions{
+		address user;
+		uint timestamp;
+		string[][] answers;
+	}
 	
 	event NewFormCreated(uint indexed id, string title, string description, uint timestamp, string endTime, address owner, bool allowResponse, uint fieldsCount, Field[] fields, uint submissionsCount);
 	event FormEdited(uint indexed id, string title, string description, uint timestamp, string endTime, address owner, bool allowResponse, uint fieldsCount, Field[] fields, uint submissionsCount);
+	event FormSubmitted(uint indexed formId, address user, string[][] answers);
 
 	constructor() public{
 		name = "FormsApp";
@@ -91,6 +100,36 @@ contract FormsApp{
 		forms[_formId] = form;
 
 		emit FormEdited(_formId, _title, _description, block.timestamp, _endTime, msg.sender, _allowResponse, _fieldsCount, _fields, form.submissionsCount);
+	}
+
+	function submitForm(uint _formId, Field[] memory _fields) public{
+		require(_formId>0 && _formId<=formsCount, "Form ID is invalid!");
+
+		// Get form 
+		Form storage _form = forms[_formId];
+
+		require(_form.allowResponse, "This form is not taking the responses anymore...");
+		require(_form.fieldsCount == _fields.length, "Invalid no. of fields submitted!");
+
+		// Increase submission count
+		uint _submissionsCount = ++_form.submissionsCount;
+
+		// Store answers
+		string[][] memory answers = new string[][](_fields.length);
+		for(uint i=0; i<_fields.length; i++){
+			string[] memory _answers = new string[](_fields[i].options.length);
+			
+			for(uint j=0; j<_fields[i].options.length; j++){
+				_answers[j]=_fields[i].options[j];
+			}
+			answers[i]=_answers;
+		}
+		
+		// Store submissions
+		submissions[_formId][_submissionsCount] = Submissions(msg.sender, block.timestamp, answers);
+		
+		// Emit event
+		emit FormSubmitted(_formId, msg.sender, answers);
 	}
 
 	function getForms() public view returns (Form[] memory){

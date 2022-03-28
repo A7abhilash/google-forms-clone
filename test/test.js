@@ -32,7 +32,7 @@ contract("FormsApp", (accounts) => {
         "Form-10101",
         "Description of form 10101",
         "16034930300",
-        true,
+        false,
         3,
         [
           {
@@ -57,14 +57,14 @@ contract("FormsApp", (accounts) => {
       result = await formsApp.createForm(
         "Form-1",
         "Description of form 1",
-        "16034930300",
+        "1648230660000",
         true,
         3,
         [
           {
             id: 1,
             title: "Field-1",
-            options: ["Option-11", "Option-12"],
+            options: ["Option-11", "Option-12", "Option-111"],
             fieldType: "checkbox",
           },
           {
@@ -106,7 +106,7 @@ contract("FormsApp", (accounts) => {
         "Form-101",
         "Description of form 101",
         "16034930300s",
-        false,
+        true,
         4,
         [
           {
@@ -132,17 +132,54 @@ contract("FormsApp", (accounts) => {
       // console.log(count.toNumber());
 
       let form = await formsApp.forms(count.toNumber());
-      console.log(form);
+      // console.log(form);
     });
 
     it("gets all forms", async () => {
       result = await formsApp.getForms({ from: accounts[0] });
-      console.log(result);
+      // console.log(result);
     });
 
     it("gets all fields of a form", async () => {
       result = await formsApp.getFields(1);
-      console.log(result);
+      // console.log(result);
+    });
+
+    it("submits form", async () => {
+      result = await formsApp.submitForm(
+        1,
+        [
+          {
+            id: 1,
+            title: "Field-1",
+            options: ["Option-12", "Option-111"],
+            fieldType: "checkbox",
+          },
+          {
+            id: 2,
+            title: "Field-2",
+            options: ["Option-22"],
+            fieldType: "radio",
+          },
+          {
+            id: 3,
+            title: "Field-3",
+            options: ["Hello World"],
+            fieldType: "text",
+          },
+          {
+            id: 4,
+            title: "Field-4",
+            options: ["One day or Day One"],
+            fieldType: "text",
+          },
+        ],
+        { from: accounts[1] }
+      );
+
+      // console.log(result.logs[0].args);
+      let submission = await formsApp.submissions(1, 1);
+      // console.log(submission);
     });
   });
 });
