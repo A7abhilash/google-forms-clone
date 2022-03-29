@@ -207,6 +207,38 @@ contract("FormsApp", (accounts) => {
         { from: accounts[2] }
       );
 
+      // Failure
+      await formsApp.submitForm(
+        1,
+        [
+          {
+            id: 1,
+            title: "Field-1",
+            options: ["Option-11"],
+            fieldType: "checkbox",
+          },
+          {
+            id: 2,
+            title: "Field-2",
+            options: ["Option-21"],
+            fieldType: "radio",
+          },
+          {
+            id: 3,
+            title: "Field-3",
+            options: ["be happy"],
+            fieldType: "text",
+          },
+          {
+            id: 4,
+            title: "Field-4",
+            options: ["be good"],
+            fieldType: "text",
+          },
+        ],
+        { from: accounts[1] }
+      ).should.be.rejected;
+
       // console.log(result.logs[0].args);
       let submission = await formsApp.submissions(1, 1);
       // console.log(submission);
@@ -216,6 +248,12 @@ contract("FormsApp", (accounts) => {
       result = await formsApp.getSubmissions(1, { from: accounts[0] });
       // console.log(result);
       // console.log(result[0].answers);
+    });
+
+    it("gets user's submission of a form", async () => {
+      result = await formsApp.getUserSubmission(1, { from: accounts[2] });
+      // console.log(result);
+      // console.log(result.answers);
     });
   });
 });

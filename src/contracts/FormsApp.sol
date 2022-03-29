@@ -104,6 +104,7 @@ contract FormsApp{
 
 	function submitForm(uint _formId, Field[] memory _fields) public{
 		require(_formId>0 && _formId<=formsCount, "Form ID is invalid!");
+		require(getUserSubmission(_formId).user == address(0x0), "You have already submitted this form!");
 
 		// Get form 
 		Form storage _form = forms[_formId];
@@ -168,6 +169,21 @@ contract FormsApp{
 		
 		for(uint i=1; i<=_submissionsCount; i++){
 				_submissions[i-1]=submissions[_form.id][i];
+		}
+
+		return _submissions;
+	}
+	
+	function getUserSubmission(uint _formId) public view returns(Submissions memory){
+		Form memory _form = forms[_formId];
+		uint _submissionsCount = _form.submissionsCount;
+
+		Submissions memory _submissions;
+		
+		for(uint i=1; i<=_submissionsCount; i++){
+			if(submissions[_form.id][i].user == msg.sender){
+				return submissions[_form.id][i];
+			}
 		}
 
 		return _submissions;
