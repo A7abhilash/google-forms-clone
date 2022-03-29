@@ -146,15 +146,30 @@ contract FormsApp{
 	}
 
 	function getFields(uint _formId) public view returns(Field[] memory){
-		Form memory form = forms[_formId];
+		Form memory _form = forms[_formId];
 
-		uint _fieldsCount = form.fieldsCount;
+		uint _fieldsCount = _form.fieldsCount;
 		Field[] memory _fields = new Field[](_fieldsCount);
 		
 		for(uint i=1; i<=_fieldsCount; i++){
-				_fields[i-1]=fields[form.id][i];
+				_fields[i-1]=fields[_form.id][i];
 		}
 
 		return _fields;
+	}
+	
+	function getSubmissions(uint _formId) public view returns(Submissions[] memory){
+		Form memory _form = forms[_formId];
+
+		require(msg.sender == _form.owner, "Unauthorized access!");
+
+		uint _submissionsCount = _form.submissionsCount;
+		Submissions[] memory _submissions = new Submissions[](_submissionsCount);
+		
+		for(uint i=1; i<=_submissionsCount; i++){
+				_submissions[i-1]=submissions[_form.id][i];
+		}
+
+		return _submissions;
 	}
 }
