@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useForms } from "../../App";
 import Loading from "../../containers/Loading";
 import CreateForm from "../create-form/CreateForm";
+import Submissions from "./Submissions";
 
 function EditForm() {
   const { id } = useParams();
@@ -27,10 +28,15 @@ function EditForm() {
       }
 
       const _fields = await formsAppContract.methods.getFields(id).call();
-      // get submissions
       _form["fields"] = _fields;
-      console.log(_form);
-      // _form["submissions"]=_submissions
+
+      // get submissions
+      const _submissions = await formsAppContract.methods
+        .getSubmissions(id)
+        .call({ from: address });
+      _form["submissions"] = _submissions;
+
+      // console.log(_form);
       setForm(_form);
     } catch (error) {
       console.log(error);
@@ -59,8 +65,14 @@ function EditForm() {
           <Tab eventKey="edit" title="Edit">
             <CreateForm form={form} />
           </Tab>
-          <Tab eventKey="submissions" title="Submissions">
-            Submissions
+          <Tab
+            eventKey="submissions"
+            title={`Submissions (${form.submissions.length})`}
+          >
+            <Submissions
+              _submissions={form.submissions}
+              _fields={form.fields}
+            />
           </Tab>
         </Tabs>
       </div>
