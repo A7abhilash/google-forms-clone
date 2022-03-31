@@ -23,7 +23,7 @@ function Submissions({ _submissions = [], _fields = [] }) {
   }
 
   return (
-    <div className="row">
+    <div className="row my-5">
       <div className="col-md-4 mx-2 mx-auto my-2 border-end">
         <ListGroup>
           {submissions.map((submission) => (

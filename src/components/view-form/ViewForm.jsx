@@ -137,7 +137,7 @@ function ViewForm() {
         )}
       </div>
       <hr />
-      {isSubmittingAllowed ? (
+      {isSubmittingAllowed || isSubmitted ? (
         <div className="col-md-8 mx-1 mx-md-auto my-3">
           {isSubmitted && (
             <h5 className="text-center text-primary">Your Response:</h5>

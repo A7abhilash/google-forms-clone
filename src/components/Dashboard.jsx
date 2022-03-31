@@ -47,12 +47,16 @@ function Dashboard() {
         <div key={`Form-key-${index}`} className="col-md-4 m-2 m-md-0 p-2">
           <Link
             to={`/edit-form/${form.id}`}
-            className="bg-light d-flex align-items-center justify-content-center shadow text-decoration-none text-dark"
+            className="bg-light d-flex p-3 shadow text-decoration-none text-dark"
             style={{ borderRadius: 15, height: "20vh" }}
           >
-            <div className="d-block text-center p-3">
-              <h6>{form.title}</h6>
-              <p className="text-truncate">{form.description}</p>
+            <div className="d-block">
+              <h4 className="text-primary">{form.title}</h4>
+              <div>
+                {form.description.length < 150
+                  ? form.description
+                  : form.description.substr(0, 150) + "..."}
+              </div>
             </div>
           </Link>
         </div>
